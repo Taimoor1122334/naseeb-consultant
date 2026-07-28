@@ -11,12 +11,35 @@ $messages = [];
 $errors = [];
 $done = false;
 
-function install_pdo_server(array $config): PDO
+/**
+ * Connect to the existing MySQL database.
+ * Shared hosts (StackCP/cPanel) already create the DB in the panel —
+ * PHP usually cannot CREATE DATABASE there.
+ */
+function install_pdo(array $config): PDO
 {
-    $dsn = sprintf('mysql:host=%s;charset=%s', $config['host'], $config['charset'] ?? 'utf8mb4');
-    return new PDO($dsn, $config['user'], $config['pass'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
+    if (($config['pass'] ?? '') === '' || ($config['pass'] ?? '') === 'CHANGE_THIS_PASSWORD') {
+        throw new RuntimeException(
+            'Set your MySQL password in the hosting panel first, then put the same password in config/database.php (replace CHANGE_THIS_PASSWORD).'
+        );
+    }
+
+    $dsn = sprintf(
+        'mysql:host=%s;dbname=%s;charset=%s',
+        $config['host'],
+        $config['name'],
+        $config['charset'] ?? 'utf8mb4'
+    );
+
+    try {
+        return new PDO($dsn, $config['user'], $config['pass'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        ]);
+    } catch (PDOException $e) {
+        $hint = ' Check config/database.php: host should be your Server name (e.g. sdb-68.hosting.stackcp.net), '
+            . 'name and user should match the Database/Username, and pass must be the password you saved in the panel.';
+        throw new RuntimeException('Could not connect to MySQL: ' . $e->getMessage() . $hint);
+    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -28,10 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new RuntimeException('Admin username required and password must be at least 6 characters.');
         }
 
-        $pdo = install_pdo_server($config);
-        $dbName = str_replace('`', '``', $config['name']);
-        $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$dbName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-        $pdo->exec("USE `{$dbName}`");
+        // Use the database you already created in the hosting panel
+        $pdo = install_pdo($config);
 
         $schema = file_get_contents(__DIR__ . '/sql/schema.sql');
         $pdo->exec($schema);
@@ -245,7 +266,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endforeach; ?>
 
         <?php if (!$done): ?>
-            <p class="hint">First edit <code>config/database.php</code> with your hosting MySQL credentials, create an empty database in cPanel if needed, then submit this form.</p>
+            <p class="hint">1) Create the MySQL database in your hosting panel.<br>
+            2) Set a database password and click Save.<br>
+            3) Put host, database name, username, and password into <code>config/database.php</code>.<br>
+            4) Then submit this form (admin login for the CMS dashboard).</p>
             <form method="post">
                 <label for="admin_username">Admin username</label>
                 <input id="admin_username" name="admin_username" value="admin" required>

@@ -1,12 +1,14 @@
 <?php
 /**
  * Database configuration — update these values for your hosting.
- * In cPanel: MySQL Databases → create DB + user → paste credentials here.
+ *
+ * StackCP / 20i: use the Server hostname shown in Manage MySQL Databases
+ * (not "localhost"), and set a DB password there first.
  */
 return [
-    'host'     => 'localhost',
-    'name'     => 'naseeb_cms',      // your MySQL database name
-    'user'     => 'root',            // your MySQL username
-    'pass'     => '',                // your MySQL password
+    'host'     => 'sdb-68.hosting.stackcp.net',
+    'name'     => 'naseeb_cms-353034398fd6',  // database name
+    'user'     => 'naseeb_cms-353034398fd6',  // database username (same on StackCP)
+    'pass'     => 'CHANGE_THIS_PASSWORD',    // set password in hosting panel, then paste here
     'charset'  => 'utf8mb4',
 ];

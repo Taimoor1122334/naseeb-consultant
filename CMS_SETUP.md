@@ -17,27 +17,27 @@ Upload the whole project to your hosting (public_html or domain root), including
 
 ## 2. Create MySQL database
 
-In **cPanel → MySQL Databases**:
+In your hosting panel (**Manage MySQL Databases** / cPanel):
 
-1. Create a database (example: `naseeb_cms`)
-2. Create a user with a strong password
-3. Add the user to the database with **All Privileges**
+1. Create a database (you already have one on StackCP)
+2. **Set a password** for that database and click **Save** (required)
+3. Note the **Server** hostname (on StackCP this is like `sdb-68.hosting.stackcp.net`, not `localhost`)
 
 ## 3. Edit database config
 
-Open `config/database.php` and set your credentials:
+Open `config/database.php` and set your credentials from the panel:
 
 ```php
 return [
-    'host'     => 'localhost',
-    'name'     => 'naseeb_cms',   // your DB name
-    'user'     => 'your_db_user',
-    'pass'     => 'your_db_password',
+    'host'     => 'sdb-68.hosting.stackcp.net', // Server from MySQL panel
+    'name'     => 'naseeb_cms-353034398fd6',    // Database/Username
+    'user'     => 'naseeb_cms-353034398fd6',    // same as name on StackCP
+    'pass'     => 'your_real_password_here',    // password you saved in the panel
     'charset'  => 'utf8mb4',
 ];
 ```
 
-On some hosts the DB name looks like `cpaneluser_naseeb_cms`.
+Do **not** leave `pass` as `CHANGE_THIS_PASSWORD`.
 
 ## 4. Run installer
 
