@@ -73,56 +73,80 @@ document.addEventListener('DOMContentLoaded', () => {
         counterElements.forEach(el => counterObserver.observe(el));
     }
 
-    // 5. TESTIMONIALS SLIDER AUTOMATION
-    const slides = document.querySelectorAll('.testimonial-slide');
-    const dots = document.querySelectorAll('.testimonials-wrapper .dot');
-    if (slides.length > 0) {
+    // 5. TESTIMONIALS SLIDER AUTOMATION (re-bindable after CMS updates)
+    let testimonialInterval = null;
+
+    const initTestimonialsSlider = () => {
+        if (testimonialInterval) {
+            clearInterval(testimonialInterval);
+            testimonialInterval = null;
+        }
+
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.testimonials-wrapper .dot');
+        if (slides.length === 0) return;
+
         let currentSlide = 0;
-        let slideInterval;
 
         const showSlide = (n) => {
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            slides[n].classList.add('active');
-            dots[n].classList.add('active');
+            const liveSlides = document.querySelectorAll('.testimonial-slide');
+            const liveDots = document.querySelectorAll('.testimonials-wrapper .dot');
+            liveSlides.forEach(slide => slide.classList.remove('active'));
+            liveDots.forEach(dot => dot.classList.remove('active'));
+            if (liveSlides[n]) liveSlides[n].classList.add('active');
+            if (liveDots[n]) liveDots[n].classList.add('active');
             currentSlide = n;
         };
 
         const nextSlide = () => {
-            let next = (currentSlide + 1) % slides.length;
-            showSlide(next);
+            const liveSlides = document.querySelectorAll('.testimonial-slide');
+            if (!liveSlides.length) return;
+            showSlide((currentSlide + 1) % liveSlides.length);
         };
 
-        const startSlider = () => {
-            slideInterval = setInterval(nextSlide, 6000);
-        };
-
-        const stopSlider = () => {
-            clearInterval(slideInterval);
-        };
-
-        // Dots trigger clicks
         dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                stopSlider();
+            dot.onclick = () => {
+                if (testimonialInterval) clearInterval(testimonialInterval);
                 showSlide(index);
-                startSlider();
-            });
+                testimonialInterval = setInterval(nextSlide, 6000);
+            };
         });
 
-        // Initialize Slider
         showSlide(0);
-        startSlider();
-    }
+        testimonialInterval = setInterval(nextSlide, 6000);
+    };
+
+    initTestimonialsSlider();
+    document.addEventListener('cms:testimonials-updated', initTestimonialsSlider);
+
+    // Restart hero counters after CMS updates stat targets
+    document.addEventListener('cms:stats-updated', () => {
+        document.querySelectorAll('.counter-val').forEach((el) => {
+            const target = parseInt(el.getAttribute('data-target'), 10);
+            if (!target) return;
+            let count = 0;
+            const speed = target / 50;
+            const updateCount = () => {
+                count += speed;
+                if (count < target) {
+                    el.innerText = Math.floor(count);
+                    requestAnimationFrame(updateCount);
+                } else {
+                    el.innerText = target;
+                }
+            };
+            updateCount();
+        });
+    });
 
     // 6. REAL-TIME COUNTRY FILTER (For destinations.html)
     const countrySearch = document.getElementById('country-search');
-    const countryCards = document.querySelectorAll('.country-card');
     if (countrySearch) {
         countrySearch.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
-            countryCards.forEach(card => {
-                const countryName = card.querySelector('.country-card-title').innerText.toLowerCase();
+            document.querySelectorAll('.country-card').forEach(card => {
+                const titleEl = card.querySelector('.country-card-title');
+                const countryName = titleEl ? titleEl.innerText.toLowerCase() : '';
                 const textDesc = card.innerText.toLowerCase();
                 if (countryName.includes(query) || textDesc.includes(query)) {
                     card.style.display = 'block';
