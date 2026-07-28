@@ -19,6 +19,16 @@ if ($action === 'delete' && $editId > 0) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($action !== 'delete')) {
     csrf_verify();
     try {
+        if (!empty($_POST['save_page_text'])) {
+            foreach (['destinations_banner_title', 'destinations_search_hint', 'destinations_search_placeholder'] as $key) {
+                if (isset($_POST[$key])) {
+                    set_content($key, trim((string) $_POST[$key]));
+                }
+            }
+            flash_set('ok', 'Destinations page text saved.');
+            redirect('destinations.php');
+        }
+
         $id = (int) ($_POST['id'] ?? 0);
         $slug = trim((string) ($_POST['slug'] ?? ''));
         $name = trim((string) ($_POST['name'] ?? ''));
@@ -145,6 +155,31 @@ admin_header('Destinations', 'destinations.php');
     </form>
 </div>
 <?php else: ?>
+
+<?php
+$defaults = require __DIR__ . '/../includes/default_content.php';
+$pageText = [
+    'destinations_banner_title' => get_content('destinations_banner_title', $defaults['destinations_banner_title'] ?? ''),
+    'destinations_search_hint' => get_content('destinations_search_hint', $defaults['destinations_search_hint'] ?? ''),
+    'destinations_search_placeholder' => get_content('destinations_search_placeholder', $defaults['destinations_search_placeholder'] ?? ''),
+];
+?>
+<div class="card">
+    <h2>Destinations page text</h2>
+    <form method="post">
+        <?= csrf_field() ?>
+        <input type="hidden" name="save_page_text" value="1">
+        <label>Banner title</label>
+        <input type="text" name="destinations_banner_title" value="<?= e($pageText['destinations_banner_title']) ?>">
+        <label>Search placeholder</label>
+        <input type="text" name="destinations_search_placeholder" value="<?= e($pageText['destinations_search_placeholder']) ?>">
+        <label>Search hint text</label>
+        <input type="text" name="destinations_search_hint" value="<?= e($pageText['destinations_search_hint']) ?>">
+        <div class="actions">
+            <button type="submit" class="btn btn-gold">Save page text</button>
+        </div>
+    </form>
+</div>
 
 <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">

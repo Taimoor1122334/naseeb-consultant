@@ -370,6 +370,232 @@
         // filled via settings in applyContactPageDetails
     };
 
+    const applyAboutPage = (content) => {
+        if (!document.getElementById('about-legacy')) return;
+
+        const ceo = document.querySelector('.ceo-message-card');
+        if (ceo) {
+            const title = ceo.querySelector('h3');
+            const quote = ceo.querySelector('p');
+            const name = ceo.querySelector('h4');
+            const role = ceo.querySelector('h4 + p');
+            const initials = ceo.querySelector('div[style*="border-radius: 50%"]');
+            if (title && content.about_ceo_title) title.textContent = content.about_ceo_title;
+            if (quote && content.about_ceo_quote) quote.textContent = content.about_ceo_quote;
+            if (name && content.about_ceo_name) name.textContent = content.about_ceo_name;
+            if (role && content.about_ceo_role) role.textContent = content.about_ceo_role;
+            if (initials && content.about_ceo_initials) initials.textContent = content.about_ceo_initials;
+        }
+
+        const storyCol = document.querySelector('#about-legacy .contact-layout > div:last-child');
+        if (storyCol) {
+            const sub = storyCol.querySelector('.section-subtitle');
+            const title = storyCol.querySelector('h2');
+            const paras = storyCol.querySelectorAll('p');
+            const checks = storyCol.querySelectorAll('.features-grid span');
+            if (sub && content.about_story_subtitle) sub.textContent = content.about_story_subtitle;
+            if (title && content.about_story_title) title.textContent = content.about_story_title;
+            if (paras[0] && content.about_story_p1) paras[0].textContent = content.about_story_p1;
+            if (paras[1] && content.about_story_p2) paras[1].textContent = content.about_story_p2;
+            if (checks[0] && content.about_check1) checks[0].textContent = content.about_check1;
+            if (checks[1] && content.about_check2) checks[1].textContent = content.about_check2;
+        }
+
+        const values = document.getElementById('about-values');
+        if (values) {
+            const sub = values.querySelector('.section-subtitle');
+            const title = values.querySelector('.section-header h2');
+            const desc = values.querySelector('.section-desc');
+            if (sub && content.about_values_subtitle) sub.textContent = content.about_values_subtitle;
+            if (title && content.about_values_title) title.textContent = content.about_values_title;
+            if (desc && content.about_values_desc) desc.textContent = content.about_values_desc;
+            const cards = values.querySelectorAll('.feature-card');
+            const map = [
+                ['about_value1_title', 'about_value1_text'],
+                ['about_value2_title', 'about_value2_text'],
+                ['about_value3_title', 'about_value3_text'],
+            ];
+            map.forEach((pair, i) => {
+                if (!cards[i]) return;
+                const h3 = cards[i].querySelector('h3');
+                const p = cards[i].querySelector('p');
+                if (h3 && content[pair[0]]) h3.textContent = content[pair[0]];
+                if (p && content[pair[1]]) p.textContent = content[pair[1]];
+            });
+        }
+
+        const cred = document.getElementById('about-certifications');
+        if (cred) {
+            const sub = cred.querySelector('.section-subtitle');
+            const title = cred.querySelector('.section-header h2');
+            const desc = cred.querySelector('.section-desc');
+            if (sub && content.about_cred_subtitle) sub.textContent = content.about_cred_subtitle;
+            if (title && content.about_cred_title) title.textContent = content.about_cred_title;
+            if (desc && content.about_cred_desc) desc.textContent = content.about_cred_desc;
+            const boxes = cred.querySelectorAll('.features-grid > div');
+            const cmap = [
+                ['about_cred1_title', 'about_cred1_text'],
+                ['about_cred2_title', 'about_cred2_text'],
+                ['about_cred3_title', 'about_cred3_text'],
+                ['about_cred4_title', 'about_cred4_text'],
+            ];
+            cmap.forEach((pair, i) => {
+                if (!boxes[i]) return;
+                const h4 = boxes[i].querySelector('h4');
+                const p = boxes[i].querySelector('p');
+                if (h4 && content[pair[0]]) h4.textContent = content[pair[0]];
+                if (p && content[pair[1]]) p.textContent = content[pair[1]];
+            });
+        }
+    };
+
+    const applyServicesPage = (content) => {
+        if (!document.getElementById('services-details')) return;
+
+        const details = document.getElementById('services-details');
+        const sub = details.querySelector('.section-subtitle');
+        const title = details.querySelector('.section-header h2');
+        const desc = details.querySelector('.section-desc');
+        if (sub && content.services_subtitle) sub.textContent = content.services_subtitle;
+        if (title && content.services_title) title.textContent = content.services_title;
+        if (desc && content.services_desc) desc.textContent = content.services_desc;
+
+        const cards = details.querySelectorAll('.service-card');
+        for (let i = 0; i < 3; i++) {
+            const card = cards[i];
+            if (!card) continue;
+            const n = i + 1;
+            const h3 = card.querySelector('h3');
+            const p = card.querySelector('p');
+            const bullets = card.querySelectorAll('.service-bullets li');
+            if (h3 && content[`services_card${n}_title`]) h3.textContent = content[`services_card${n}_title`];
+            if (p && content[`services_card${n}_text`]) p.textContent = content[`services_card${n}_text`];
+            [1, 2, 3].forEach((b) => {
+                const li = bullets[b - 1];
+                if (!li || !content[`services_card${n}_b${b}`]) return;
+                li.innerHTML = `<i class="fas fa-check"></i> ${escapeHtml(content[`services_card${n}_b${b}`])}`;
+            });
+        }
+
+        const tool = document.getElementById('eligibility-tool');
+        if (tool) {
+            const tsub = tool.querySelector('.section-subtitle');
+            const ttitle = tool.querySelector('.section-header h2');
+            const tdesc = tool.querySelector('.section-desc');
+            if (tsub && content.services_tool_subtitle) tsub.textContent = content.services_tool_subtitle;
+            if (ttitle && content.services_tool_title) ttitle.textContent = content.services_tool_title;
+            if (tdesc && content.services_tool_desc) tdesc.textContent = content.services_tool_desc;
+
+            const sidebar = tool.querySelector('.calc-sidebar');
+            if (sidebar) {
+                const sh = sidebar.querySelector('h3');
+                const sp = sidebar.querySelector(':scope > p');
+                if (sh && content.services_tool_sidebar_title) sh.textContent = content.services_tool_sidebar_title;
+                if (sp && content.services_tool_sidebar_text) sp.textContent = content.services_tool_sidebar_text;
+                const feats = sidebar.querySelectorAll('.sidebar-feat-item');
+                if (feats[0]) {
+                    const h5 = feats[0].querySelector('h5');
+                    const p = feats[0].querySelector('p');
+                    if (h5 && content.services_tool_feat1_title) h5.textContent = content.services_tool_feat1_title;
+                    if (p && content.services_tool_feat1_text) p.textContent = content.services_tool_feat1_text;
+                }
+                if (feats[1]) {
+                    const h5 = feats[1].querySelector('h5');
+                    const p = feats[1].querySelector('p');
+                    if (h5 && content.services_tool_feat2_title) h5.textContent = content.services_tool_feat2_title;
+                    if (p && content.services_tool_feat2_text) p.textContent = content.services_tool_feat2_text;
+                }
+            }
+        }
+    };
+
+    const applyScholarshipsPage = (content) => {
+        if (!document.getElementById('scholarship-intro')) return;
+
+        const intro = document.getElementById('scholarship-intro');
+        const sub = intro.querySelector('.section-subtitle');
+        const title = intro.querySelector('h2');
+        const paras = intro.querySelectorAll('p');
+        if (sub && content.scholarships_intro_subtitle) sub.textContent = content.scholarships_intro_subtitle;
+        if (title && content.scholarships_intro_title) title.textContent = content.scholarships_intro_title;
+        // paras[0], paras[1] are intro; tip has its own p
+        const tipBox = intro.querySelector('[style*="border-left"]');
+        const introParas = [];
+        intro.querySelectorAll('.contact-layout > div:first-child > p').forEach((p) => introParas.push(p));
+        // Fallback: first two p outside tip box
+        const allP = Array.from(intro.querySelectorAll('p')).filter((p) => !tipBox || !tipBox.contains(p));
+        if (allP[0] && content.scholarships_intro_p1) allP[0].textContent = content.scholarships_intro_p1;
+        if (allP[1] && content.scholarships_intro_p2) allP[1].textContent = content.scholarships_intro_p2;
+        if (tipBox) {
+            const tipTitle = tipBox.querySelector('h4');
+            const tipText = tipBox.querySelector('p');
+            if (tipTitle && content.scholarships_tip_title) {
+                tipTitle.innerHTML = `<i class="fas fa-lightbulb" style="color:var(--color-gold)"></i> ${escapeHtml(content.scholarships_tip_title)}`;
+            }
+            if (tipText && content.scholarships_tip_text) tipText.textContent = content.scholarships_tip_text;
+        }
+        const img = intro.querySelector('img');
+        if (img && content.scholarships_image) img.setAttribute('src', content.scholarships_image);
+
+        const opps = document.getElementById('scholarship-opportunities');
+        if (opps) {
+            const osub = opps.querySelector('.section-subtitle');
+            const otitle = opps.querySelector('.section-header h2');
+            const odesc = opps.querySelector('.section-desc');
+            if (osub && content.scholarships_list_subtitle) osub.textContent = content.scholarships_list_subtitle;
+            if (otitle && content.scholarships_list_title) otitle.textContent = content.scholarships_list_title;
+            if (odesc && content.scholarships_list_desc) odesc.textContent = content.scholarships_list_desc;
+
+            const cards = opps.querySelectorAll('.services-grid .service-card');
+            for (let i = 0; i < 2; i++) {
+                const card = cards[i];
+                if (!card) continue;
+                const n = i + 1;
+                const h3 = card.querySelector('h3');
+                const p = card.querySelector('p');
+                const bullets = card.querySelectorAll('.service-bullets li');
+                if (h3 && content[`scholarships_prog${n}_title`]) {
+                    const icon = h3.querySelector('i');
+                    const iconHtml = icon ? icon.outerHTML + ' ' : '';
+                    h3.innerHTML = iconHtml + escapeHtml(content[`scholarships_prog${n}_title`]);
+                }
+                if (p && content[`scholarships_prog${n}_text`]) p.textContent = content[`scholarships_prog${n}_text`];
+                [1, 2, 3].forEach((b) => {
+                    const li = bullets[b - 1];
+                    if (!li || !content[`scholarships_prog${n}_b${b}`]) return;
+                    li.innerHTML = `<i class="fas fa-check" style="color:var(--color-success)"></i> ${escapeHtml(content[`scholarships_prog${n}_b${b}`])}`;
+                });
+            }
+
+            const stepsWrap = opps.querySelector('.features-grid');
+            const stepsTitle = opps.querySelector('h3');
+            if (stepsTitle && content.scholarships_steps_title) stepsTitle.textContent = content.scholarships_steps_title;
+            if (stepsWrap) {
+                const steps = stepsWrap.children;
+                for (let i = 0; i < 3; i++) {
+                    const step = steps[i];
+                    if (!step) continue;
+                    const n = i + 1;
+                    const h4 = step.querySelector('h4');
+                    const p = step.querySelector('p');
+                    if (h4 && content[`scholarships_step${n}_title`]) h4.textContent = content[`scholarships_step${n}_title`];
+                    if (p && content[`scholarships_step${n}_text`]) p.textContent = content[`scholarships_step${n}_text`];
+                }
+            }
+        }
+    };
+
+    const applyDestinationsPageText = (content) => {
+        const search = document.getElementById('country-search');
+        if (search && content.destinations_search_placeholder) {
+            search.setAttribute('placeholder', content.destinations_search_placeholder);
+        }
+        const hint = document.querySelector('.filter-search-container > div:last-child');
+        if (hint && content.destinations_search_hint && hint.querySelector('i') === null) {
+            hint.textContent = content.destinations_search_hint;
+        }
+    };
+
     const applyContactPageDetails = (settings) => {
         const items = document.querySelectorAll('.contact-item');
         items.forEach((item) => {
@@ -419,6 +645,10 @@
             applyContactBlocks(settings);
             applyContactPageDetails(settings);
             applyWhatsApp(settings);
+            applyAboutPage(content);
+            applyServicesPage(content);
+            applyScholarshipsPage(content);
+            applyDestinationsPageText(content);
 
             document.documentElement.classList.add('cms-loaded');
         } catch (err) {

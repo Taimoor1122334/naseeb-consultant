@@ -64,10 +64,21 @@ Sections you can edit:
 | Menu | What you change |
 |------|-----------------|
 | Home Page | Hero text, stats, features, CTA, university ticker |
-| Destinations | Country names, descriptions, tuition, intakes, images |
+| About Page | CEO message, story, pillars, credentials |
+| Services Page | Service cards, eligibility tool text |
+| Scholarships | Intro, tip, image, programs, apply steps |
+| Destinations | Country cards + page banner/search text |
 | Testimonials | Student quotes, names, photos |
-| Contact & Footer | Phone, email, address, social links, page banners |
-| Site Settings | Logo, header button, WhatsApp number/message, admin password |
+| Contact & Footer | Phone, email, address, social links |
+| Site Settings | Logo, header button, WhatsApp, admin password |
+
+### Already installed? Add new editable pages
+
+If CMS was installed earlier, upload the new files then visit once:
+
+`https://yourdomain.com/upgrade.php`
+
+Then **delete `upgrade.php`**.
 
 ## 7. Folder permissions
 

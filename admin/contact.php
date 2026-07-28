@@ -8,7 +8,6 @@ $settingKeys = [
 ];
 $contentKeys = [
     'contact_banner_title', 'contact_panel_title', 'contact_panel_desc', 'contact_form_title',
-    'destinations_banner_title', 'about_banner_title', 'services_banner_title', 'scholarships_banner_title',
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -76,30 +75,6 @@ admin_header('Contact & Footer', 'contact.php');
         <textarea name="contact_panel_desc"><?= e($c['contact_panel_desc']) ?></textarea>
         <label>Form title</label>
         <input type="text" name="contact_form_title" value="<?= e($c['contact_form_title']) ?>">
-    </div>
-
-    <div class="card">
-        <h2>Other page banners</h2>
-        <div class="form-row">
-            <div>
-                <label>Destinations banner</label>
-                <input type="text" name="destinations_banner_title" value="<?= e($c['destinations_banner_title']) ?>">
-            </div>
-            <div>
-                <label>About banner</label>
-                <input type="text" name="about_banner_title" value="<?= e($c['about_banner_title']) ?>">
-            </div>
-        </div>
-        <div class="form-row">
-            <div>
-                <label>Services banner</label>
-                <input type="text" name="services_banner_title" value="<?= e($c['services_banner_title']) ?>">
-            </div>
-            <div>
-                <label>Scholarships banner</label>
-                <input type="text" name="scholarships_banner_title" value="<?= e($c['scholarships_banner_title']) ?>">
-            </div>
-        </div>
     </div>
 
     <div class="card">

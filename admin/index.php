@@ -22,10 +22,13 @@ admin_header('Dashboard', 'index.php');
     <h2>Edit website content</h2>
     <p style="color:var(--muted); margin:0 0 1rem;">Choose a section to update. Changes appear on the live site after save (refresh the website page).</p>
     <div class="actions">
-        <a class="btn btn-navy" href="home.php">Home page text</a>
-        <a class="btn btn-navy" href="destinations.php">Destinations &amp; images</a>
-        <a class="btn btn-navy" href="testimonials.php">Student stories</a>
-        <a class="btn btn-navy" href="contact.php">Phone, address, footer</a>
+        <a class="btn btn-navy" href="home.php">Home</a>
+        <a class="btn btn-navy" href="about.php">About</a>
+        <a class="btn btn-navy" href="services.php">Services</a>
+        <a class="btn btn-navy" href="scholarships.php">Scholarships</a>
+        <a class="btn btn-navy" href="destinations.php">Destinations</a>
+        <a class="btn btn-navy" href="testimonials.php">Testimonials</a>
+        <a class="btn btn-navy" href="contact.php">Contact &amp; Footer</a>
         <a class="btn btn-gold" href="settings.php">Logo &amp; WhatsApp</a>
     </div>
 </div>

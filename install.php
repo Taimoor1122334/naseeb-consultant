@@ -134,11 +134,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'contact_panel_title'   => 'Visit Lahore Office',
             'contact_panel_desc'    => 'Naseeb Consultant head office is located in Moon Market, Iqbal Town. Students are welcome to drop by for a free in-person session with certified counselors.',
             'contact_form_title'    => 'Schedule Consultation',
-            'destinations_banner_title' => 'Study Destinations',
-            'about_banner_title'    => 'About Our Profile',
-            'services_banner_title' => 'Visa Services & Eligibility',
-            'scholarships_banner_title' => 'Scholarship Highlights',
         ];
+
+        // About / Services / Scholarships / Destinations page fields
+        $content = array_merge($content, require __DIR__ . '/includes/default_content.php');
 
         $cStmt = $pdo->prepare(
             'INSERT INTO page_content (content_key, content_value) VALUES (?, ?)
